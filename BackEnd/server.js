@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const route=require("./routes/userRoutes")
+const expressValidator=require('express-validator')
 
 // create express app
 const app = express();
@@ -10,7 +11,10 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 // parse requests of content-type - application/json
 app.use(bodyParser.json())
+app.use(expressValidator())
+
 app.use("/",route)
+
 
 // Configuring the database
 const dbConfig = require('./config/database.config.js');
@@ -28,14 +32,9 @@ mongoose.connect(dbConfig.url, {
     process.exit();
 });
 
-// // define a simple route
-// app.get('/', (req, res) => {
-//     res.json({"message": "Welcome to Chat application. "});
-// });
 
-// require('./routes/userRoutes')(app);
 
 // listen for requests
-app.listen(3006, () => {
-    console.log("Server is listening on port 3006");
+app.listen(4003, () => {
+    console.log("Server is listening on port 4003");
 });

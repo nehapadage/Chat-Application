@@ -1,104 +1,176 @@
 const userServices = require('../services/userServices');
 
-class UserController{
-    // Create and Save a new User
-createUser = (req, res) => {
-    
-    let data=userServices.createUserServices(req.body);
-    
-    res.send(data);      
+class UserController {
+
+
+    // Create and Save a new User                   
+    createUser(req, res) {
+        console.log(" in controller");
+
+        try {
+            console.log(" controller");
+
+
+            req.checkBody('FirstName', 'should not be empty').notEmpty(); //Validations
+            req.checkBody('FirstName', 'should be Alphabet').isAlpha();
+
+            req.checkBody('LastName', 'should not be empty').notEmpty();
+            req.checkBody('LastName', 'should be Alphabet').isAlpha();
+
+            req.checkBody('EmailId', 'should not be empty').notEmpty();
+            req.checkBody('EmailId', 'should be Valid').isEmail();
+
+            req.checkBody('Password', 'should not be empty').notEmpty();
+            req.checkBody('Password', 'should have length 6').isLength({
+                min: 6
+            });
+            req.checkBody('Password', 'should have maximum length 12').isLength({
+                max: 12
+            });
+
+            let error = req.validationErrors();
+
+
+            if (error) {
+                return res.status(200).send(response); // HTTP code 200-successful response-Ok
+            } else {
+                let createUserDataObject = {
+                    FirstName: req.body.FirstName,
+                    LastName: req.body.LastName,
+                    EmailId: req.body.EmailId,
+                    Password: req.body.Password,
+                }
+
+                //call userServices method and pass data object
+                //callback get ans from userServices in the form of error and data
+
+                userServices.createUserServices(createUserDataObject, (err, data) => {
+                    //send response to server
+                    if (err) {
+                        return res.status(422).send(err); // HTTP code 422-Client errors-unprocessable entity
+                    } else {
+                        return res.status(200).send(data); // HTTP code 200-successful response-Ok
+                    }
+                })
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
     }
+
+
+
+    login(req, res) {
+        try {
+            console.log(" in controller");
+
+            req.checkBody('EmailId', 'should not be empty').notEmpty();
+            req.checkBody('EmailId', 'should be Valid').isEmail();
+
+            req.checkBody('Password', 'should not be empty').notEmpty();
+            req.checkBody('Password', 'should have length 6').isLength({
+                min: 6
+            });
+            req.checkBody('Password', 'should have maximum length 12').isLength({
+                max: 12
+            });
+
+            let error = req.validationErrors();
+
+            if (error) {
+                return res.status(200).send(response); // HTTP code 200-successful response-Ok
+            } else {
+                let loginDataObject = {
+                    EmailId: req.body.EmailId,
+                    Password: req.body.Password
+                }
+
+                userServices.loginServices(loginDataObject, (err, data) => {
+                    //send response to server
+                    if (err) {
+                        return res.status(422).send(err); // HTTP code 422-Client errors-unprocessable entity
+                    } else {
+
+                        return res.status(200).send(data); // HTTP code 200-successful response-Ok
+                    }
+                })
+
+            }
+
+        } catch (error) {
+            console.log(error);
+
+        }
+    }
+
+    forgetPassword(req, res) {
+        try {
+            console.log(" in controller");
+
+            req.checkBody('EmailId', 'should not be empty').notEmpty();
+            req.checkBody('EmailId', 'should be Valid').isEmail();
+
+            let error = req.validationErrors();
+
+            if (error) {
+                return res.status(200).send(response); // HTTP code 200-successful response-Ok
+            } else {
+                let forgetPasswordDataObject = {
+                    EmailId: req.body.EmailId,
+                }
+
+                userServices.forgetPasswordServices(forgetPasswordDataObject, (err, data) => {
+                    //send response to server
+                    if (err) {
+                        return res.status(422).send(err); // HTTP code 422-Client errors-unprocessable entity
+                    } else {
+                        return res.status(200).send(data); // HTTP code 200-successful response-Ok
+                    }
+                })
+
+            }
+
+        } catch (error) {
+            console.log(error);
+
+        }
+    }
+
+    resetPassword(req, res) {
+        try {
+
+            req.checkBody('Password', 'should not be empty').notEmpty();
+            req.checkBody('Password', 'should have length 6').isLength({
+                min: 6
+            });
+            req.checkBody('Password', 'should have maximum length 12').isLength({
+                max: 12
+            });
+
+            let error = req.validationErrors();
+
+            if (error) {
+                return res.status(200).send(response); // HTTP code 200-successful response-Ok
+            } else {
+                let resetPasswordDataObject = {
+                    Password: req.body.Password,
+                }
+
+
+
+
+
+
+
+
+            }
+
+        } catch (error) {
+            console.log(error);
+
+        }
+    }
+
 }
-    
-
-// // Retrieve and return all Users from the database.
-// findAll = (req, res) => {
-//     User.find()
-//     .then(users => {
-//         res.send(users);
-//     }).catch(err => {
-//         res.status(500).send({
-//             message: err.message || "Some error occurred while retrieving users."
-//         });
-//     });
-// };
-
-// // Find a single User with a UserId
-// findOne = (req, res) => {
-//     User.findById(req.params.userId)
-//     .then(user => {
-//         if(!user) {
-//             return res.status(404).send({
-//                 message: "User not found with id " + req.params.userId
-//             });            
-//         }
-//         res.send(user);
-//     }).catch(err => {
-//         if(err.kind === 'ObjectId') {
-//             return res.status(404).send({
-//                 message: "User not found with id " + req.params.userId
-//             });                
-//         }
-//         return res.status(500).send({
-//             message: "Error retrieving user with id " + req.params.userId
-//         });
-//     });
-// };
-
-// // Update a User identified by the UserId in the request
-// update = (req, res) => {
-//     // Validate Request
-//     if(!req.body.content) {
-//         return res.status(400).send({
-//             message: "User content can not be empty"
-//         });
-//     }
-
-//     // Find User and update it with the request body
-//     User.findByIdAndUpdate(req.params.userId, {
-//         title: req.body.title || "Untitled User",
-//         content: req.body.content
-//     }, {new: true})
-//     .then(user => {
-//         if(!user) {
-//             return res.status(404).send({
-//                 message: "User not found with id " + req.params.userId
-//             });
-//         }
-//         res.send(user);
-//     }).catch(err => {
-//         if(err.kind === 'ObjectId') {
-//             return res.status(404).send({
-//                 message: "User not found with id " + req.params.userId
-//             });                
-//         }
-//         return res.status(500).send({
-//             message: "Error updating user with id " + req.params.userId
-//         });
-//     });
-// };
-
-// // Delete a User with the specified UserId in the request
-// delete = (req, res) => {
-//     User.findByIdAndRemove(req.params.nameId)
-//     .then(note => {
-//         if(!user) {
-//             return res.status(404).send({
-//                 message: "User not found with id " + req.params.userId
-//             });
-//         }
-//         res.send({message: "User deleted successfully!"});
-//     }).catch(err => {
-//         if(err.kind === 'ObjectId' || err.name === 'NotFound') {
-//             return res.status(404).send({
-//                 message: "User not found with id " + req.params.userId
-//             });                
-//         }
-//         return res.status(500).send({
-//             message: "Could not delete user with id " + req.params.userId
-//         });
-//     });
-// };
-
-
- module.exports=new UserController();
+module.exports = new UserController();
