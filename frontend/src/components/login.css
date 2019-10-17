@@ -1,0 +1,64 @@
+*{
+    /*box sizing border-box;*/
+    font-family: 'Roboto',sans-serif;
+}
+.maindiv{
+    background-color: lightgray;
+    text-align: center;
+    padding: 50px;
+    width: 300px;
+    height: 370px;
+    margin: 430px;
+    margin-top: 30px;
+}
+
+#login{
+    font-style: initial;
+    font-size : xx-large;
+    margin-top: -8px;
+    font-weight: bold;
+}
+
+.maindiv img{
+    width: 400px; height: 200px;
+    align-content: center;
+    background-repeat: no-repeat;
+}
+
+
+#email{
+    width: 250px; height: 20px;
+}
+
+#password{
+    width: 250px; height: 20px;
+}
+
+#signinButton{
+    height: 35px;
+    width: 250px;
+    margin-top: 20px;
+}
+
+#registerButton{
+    height: 35px;
+    width: 250px;
+}
+
+#registerText{
+    width: 300px; height: 30px;
+    font-size: xx-small;
+    /* font-variant-caps: all-small-caps; */
+    
+}
+
+#forgetPassword{
+    /* height: 30px; */
+    width: 145px;
+    margin-top: 0px;
+    text-align: center;
+    font-size: x-small;
+    background-color: rgb(155, 140, 206);
+    font-family: sans-serif;
+    margin-right: -127px;
+}
