@@ -30,26 +30,26 @@ class UserModelAPI {
 
     createUser(createUserDataObject, callback) {
         try {
+            var response = {};
 
             /** find first email exits or not  
              * if exits terminate other logic return response
              * 
              */
-            User.find({
-                'EmailId': createUserDataObject.EmailId
-            }, 'EmailId', (err, data) => {
+            User.find({'EmailId': createUserDataObject.EmailId
+            }, (err, data) => {
                 /** if err or email already exits */
-                if (err || data.length > 0) {
-                    /** when error occured */
-                    if (err) {
-                        return callback(err);
-                    } else {
-                        /** when email is already present  */
-                        console.log("\n\n\t email already exits");
 
-                        return callback(null, false);
-                    }
-
+                /** when error occured */
+                if (err) {
+                    return callback(err);
+                } else
+                if (data.length > 0) {
+                    /** when email is already present  */
+                    console.log("\n\n\t email already exits");
+                    response.success = false;
+                    response.message="email already exits"
+                    return callback(null, response);
                 } else {
 
                     // console.log("\n\nbefore encryption Password :" + createUserDataObject.Password);
@@ -60,7 +60,7 @@ class UserModelAPI {
                             return callback(err + " Encryption Failed")
                         } else {
 
-                            // console.log("\n\n\tAfter encryption Password :" + encryptedPassword);
+                            console.log("\n\n\tAfter encryption Password :" + encryptedPassword);
 
                             /** convert data object into json format to save into schema */
 
@@ -71,26 +71,29 @@ class UserModelAPI {
                                 "Password": encryptedPassword
                             })
 
-
-
+                    
                             /** 
                              * @purpose save registration data into schema 
                              * @returns data if schema save successfully
                              */
+                            
                             createUserDetails.save((err, data) => {
                                 if (err) {
                                     /** send error to service callback function */
                                     return callback(err)
                                 } else {
                                     /** send message and data to service callback function */
-                                    console.log("\n\n\t\t Registration successfull........Neha");
 
-                                    return callback(null, true)
+                                    response.success = true;
+                                    console.log("Registration Successful ............" + data.FirstName);
+                                    return callback(null, response)
+
+
                                 }
                             })
                         }
                     })
-                } 
+                }
             })
         } catch (e) {
             console.log(e);
@@ -112,16 +115,24 @@ class UserModelAPI {
                     if (data.length > 0) {
                         console.log("Email matched in database");
 
+                        var response = {};
+
                         bycrypt.compare(loginDataObject.Password, data[0].Password, (err, passwordCompareResult) => {
                             if (err) {
                                 return callback(err);
                             } else {
                                 if (passwordCompareResult) {
+
+                                    response.success = true;
+                                    response.message = "Yaaa Login Successful ";
                                     console.log("Login Successful ............" + data[0].FirstName);
-                                    return callback(null, true)
+                                    return callback(null, response)
                                 } else {
-                                    console.log("Your Password not matched ");
-                                    return callback(null, passwordCompareResult)
+
+                                    response.success = false;
+                                    response.message = "Ohhh Your Password not matched ";
+                                    console.log("Your Password not matched ------->" + response);
+                                    return callback(null, response)
                                 }
                             }
 
@@ -140,7 +151,7 @@ class UserModelAPI {
     }
 
 
-   
+
     forgetPasswordUser(forgetPasswordDataObject, callback) {
 
         console.log("forget password " + forgetPasswordDataObject.EmailId);

@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import './login.css'
+import { login } from '../services/userService'
 
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+// import { pathToFileURL } from 'url';
 
 class Login extends Component {
 
@@ -10,29 +12,56 @@ class Login extends Component {
         super(props);
 
         this.state = {
-            
+
             email: "",
             password: ""
 
         }
     }
 
-    handlechangeall = (event) =>{
-        this.setState ( { [event.target.name] :event.target.value  } )
-       }
-       
-       handlesubmit = (event) => {
-        alert (`My email id is ${this.state.email}`);
-        // alert( JSON.stringify(this.state));
-        console.log( JSON.stringify(this.state));
-        // event.preventDefault();
-       }
+    handlechangeall = (event) => {
+        this.setState({ [event.target.name]: event.target.value })
+    }
+
+    
+    handleRegisterClick = () => {
+        console.log("register button clicked..")
+        var path = '/register'
+        this.props.history.push(path)
+    }
+
+    handleloginSubmit = () => {
+        var loginData = {};
+        loginData.EmailId = this.state.email;
+        loginData.Password = this.state.password
+
+        console.log("logindata--> ", loginData)
+
+        
+        
+        login(loginData).then((res) => {
+            //console.log("respnse in login--> ", res)
+           
+            if(res.data.success===true)
+            alert(`Login Successful-----`);
+            
+            
+        }).catch((err) => {
+            console.log("error in login--> ",err)
+        })
+    }
+
+    handleforgetPasswordSubmit=()=>{
+        console.log("forget password button clicked..")
+        var path = '/forgetpassword'
+        this.props.history.push(path)
+    }
 
     render() {
         return (
 
             <div className="maindiv">
-                <form onSubmit = {this.handlesubmit} ></form>
+                <form onSubmit={this.handlesubmit} ></form>
                 <div id="login"> Login </div>
                 <div>
                     <TextField
@@ -40,13 +69,13 @@ class Login extends Component {
                         label="Email Id"
                         type="email"
                         name="email"
-                        value={this.state.email} 
+                        value={this.state.email}
                         autoComplete="email"
                         margin="normal"
                         variant="outlined"
-                        onChange={this.handlechangeall} 
+                        onChange={this.handlechangeall}
                     />
-                     
+
                 </div>
                 <div>
                     <TextField
@@ -54,9 +83,11 @@ class Login extends Component {
                         label="Password"
                         type="password"
                         name="password"
+                        value={this.state.password}
                         autoComplete="current-password"
                         margin="normal"
                         variant="outlined"
+                        onChange={this.handlechangeall}
                     />
                 </div>
                 <div>
@@ -64,7 +95,7 @@ class Login extends Component {
                     <Button
                         id="forgetPassword"
                         variant="contained"
-
+                        onClick={this.handleforgetPasswordSubmit}
                     >
                         Forget Password?
                     </Button>
@@ -75,6 +106,7 @@ class Login extends Component {
                         id="signinButton"
                         variant="contained"
                         color="primary"
+                        onClick={this.handleloginSubmit}
                     >
                         Log In
                     </Button>
@@ -91,6 +123,7 @@ class Login extends Component {
                         id="registerButton"
                         variant="contained"
                         color="primary"
+                        onClick={this.handleRegisterClick}
                     >
                         Register
                     </Button>

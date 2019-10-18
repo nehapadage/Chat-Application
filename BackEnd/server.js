@@ -2,9 +2,14 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const route=require("./routes/userRoutes")
 const expressValidator=require('express-validator')
+var cors = require('cors')
+
+
 
 // create express app
 const app = express();
+
+app.use(cors())
 
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -35,6 +40,6 @@ mongoose.connect(dbConfig.url, {
 
 
 // listen for requests
-app.listen(4003, () => {
-    console.log("Server is listening on port 4003");
+app.listen(4005, () => {
+    console.log("Server is listening on port 4005");
 });

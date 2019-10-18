@@ -5,10 +5,13 @@ class UserController {
 
     // Create and Save a new User                   
     createUser(req, res) {
-        console.log(" in controller");
+        
 
         try {
             console.log(" controller");
+
+            console.log(req.body);
+            
 
 
             req.checkBody('FirstName', 'should not be empty').notEmpty(); //Validations
@@ -29,10 +32,14 @@ class UserController {
             });
 
             let error = req.validationErrors();
+            var response={};
 
 
             if (error) {
-                return res.status(200).send(response); // HTTP code 200-successful response-Ok
+                response.success=false;
+                response.message="Registrations failed due to validations error"
+                response.error=error
+                return res.status(422).send(response); // HTTP code 200-successful response-Ok
             } else {
                 let createUserDataObject = {
                     FirstName: req.body.FirstName,
@@ -47,9 +54,15 @@ class UserController {
                 userServices.createUserServices(createUserDataObject, (err, data) => {
                     //send response to server
                     if (err) {
-                        return res.status(422).send(err); // HTTP code 422-Client errors-unprocessable entity
+                        response.success=false;
+                        response.message = "error";
+                        response.err = err
+                        return res.status(422).send(response); // HTTP code 422-Client errors-unprocessable entity
                     } else {
-                        return res.status(200).send(data); // HTTP code 200-successful response-Ok
+                        response.success=data.success;
+                        response.message = data.message;
+                        response.data = data
+                        return res.status(200).send(response); // HTTP code 200-successful response-Ok
                     }
                 })
             }
@@ -77,8 +90,12 @@ class UserController {
             });
 
             let error = req.validationErrors();
+            var response={};
 
             if (error) {
+                response.success=false;
+                response.message="Login failed due to validations error"
+                response.error=error
                 return res.status(200).send(response); // HTTP code 200-successful response-Ok
             } else {
                 let loginDataObject = {
@@ -86,13 +103,20 @@ class UserController {
                     Password: req.body.Password
                 }
 
+                //send loginDataObject to server & get responce from server
                 userServices.loginServices(loginDataObject, (err, data) => {
-                    //send response to server
+                    
+                    
                     if (err) {
-                        return res.status(422).send(err); // HTTP code 422-Client errors-unprocessable entity
+                        response.success=false;
+                        response.message = "error";
+                        response.err = err
+                        return res.status(422).send(response); // HTTP code 422-Client errors-unprocessable entity
                     } else {
-
-                        return res.status(200).send(data); // HTTP code 200-successful response-Ok
+                        response.success=data.success;
+                        response.message = data.message;
+                        response.data = data
+                        return res.status(200).send(response); // HTTP code 200-successful response-Ok
                     }
                 })
 

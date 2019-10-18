@@ -46,6 +46,12 @@
 #registerButton{
     height: 35px;
     width: 250px;
+    margin-top: 20px;
+}
+
+#loginButton{
+    height: 35px;
+    width: 250px;
 }
 
 
