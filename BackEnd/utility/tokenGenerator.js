@@ -18,8 +18,8 @@ class TokenGenerator {
 
     verifyToken(req, res, next) {
 
-        let token = req.body.token;
-        console.log("token  is : ", req.body.token);
+        let token = req.header('token');
+        console.log("token  is : ", token);
 
 
         if (token) {
@@ -28,11 +28,15 @@ class TokenGenerator {
                     res.status(400).send(err + " Token has expired")
                 } else {
                     console.log("token " + JSON.stringify(decodedToken));
-                    req.token = decodedToken;
+                    req.decoded = decodedToken;
+                    console.log("Decoded data: "+req.decoded);
+                    
                     next();
+                   
                 }
 
             })
+            return req.decoded;
 
         } else {
             console.log("token not receive");

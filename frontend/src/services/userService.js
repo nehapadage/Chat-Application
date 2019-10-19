@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-var url = "http://localhost:4005"
+var url = "http://localhost:3000"
 
 //this flow goes to router in backend
 export function login(loginData) {
@@ -26,7 +26,7 @@ export function forgetpassword(forgetData){
 
 export function resetpassword(resetData){
     console.log("reset password data in services--> ", resetData)
-    var reset = axios.post(url + '/resetpassword', resetData)
+    var reset = axios.post(url + '/resetpassword/', resetData)
 
     return reset;
 }

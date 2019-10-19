@@ -8,9 +8,25 @@ class ResetPassword extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            password: ""
+            password: "",
+            redirect: false
         }
     }
+
+    setRedirect = () => {
+        this.setState({
+          redirect: true
+        })
+        
+      }
+
+
+      renderRedirect = () => {
+        if (this.state.redirect) {
+            var path = '/'
+            this.props.history.push(path)
+        }
+      }
 
     handlechangeall = (event) => {
         this.setState({ [event.target.name]: event.target.value })
@@ -27,8 +43,7 @@ class ResetPassword extends Component {
         resetpassword(resetData).then((res) => {
             console.log("respnse in reset password--> ", res)
            
-          
-            
+       
             
         }).catch((err) => {
             console.log("error in reset--> ",err)
@@ -56,6 +71,7 @@ class ResetPassword extends Component {
                 </div>
                 
                 <div>
+                {this.renderRedirect()}
                     <Button
                         id="signinButton"
                         variant="contained"

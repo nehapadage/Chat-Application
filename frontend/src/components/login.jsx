@@ -40,10 +40,15 @@ class Login extends Component {
         
         
         login(loginData).then((res) => {
-            //console.log("respnse in login--> ", res)
-           
+            console.log("respnse in login--> ", res)
+
+            console.log("****respnse in login token is--> ", res.data.data.token.token)
+
+                     
             if(res.data.success===true)
-            alert(`Login Successful-----`);
+            alert("Login Successful-----");
+
+            localStorage.setItem('token',res.data.data.token.token );
             
             
         }).catch((err) => {

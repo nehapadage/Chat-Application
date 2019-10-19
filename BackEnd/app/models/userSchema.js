@@ -118,7 +118,7 @@ class UserModelAPI {
                     if (data.length > 0) {
                         console.log("Email matched in database");
 
-                        // var response = {};
+                         var response = {};
                         let payload = {
                             '_id': data[0]._id,
                             'EmailId': data[0].EmailId
@@ -138,7 +138,7 @@ class UserModelAPI {
                                         'FirstName': data[0].FirstName,
                                         'LastName': data[0].LastName,
                                         'EmailId': data[0].EmailId,
-                                        'Token': jwtToken
+                                        'token': jwtToken
                                     }
                                     response.success = true;
                                     response.message = "Yaaa Login Successful ";
@@ -178,31 +178,57 @@ class UserModelAPI {
         }, (err, data) => {
 
             if (err) {
-                callback(err)
+                response.success = false;
+                response.message = " Error";
+                response.error = err;
+
+                return callback(response)
+
             } else {
+                var response = {}
                 console.log("------", data)
                 if (data.length <= 0) {
                     console.log("Your Password not matched");
-                    return callback(null, false);
+                    response.success = false;
+                    response.message = " Your Password not matched";
+                    response.content = data;
+
+                    return callback(null, response)
+
                 } else {
                     console.log("\n\n\t\t Your Password matched");
 
                     let payload = {
-                        '_id': data[0]._id
+                         '_id': data[0]._id
+                        
+
                     }
+                    console.log("payload-->",payload);
+                    
 
                     //get token from jwt
                     let jwtToken = jwtTokenGenerator.generateToken(payload);
                     console.log("Token is : " + jwtToken.token);
 
-                    let url = "http://localhost:3000/resetPassword/" + jwtToken.token;
+                    let url = "http://localhost:3001/resetpassword/" + jwtToken.token;
 
 
                     mailSender.sendMail(forgetPasswordDataObject.EmailId, url, (err, data) => {
                         if (err) {
-                            return callback(err)
+                            response.success = false;
+                            response.message = " Mail not sent due to error";
+                            response.error = err;
+                            return callback(response)
                         } else {
-                            return callback(null, data)
+                            data={
+                                "token":jwtToken.token,
+                                "url":url
+                            }
+                            response.success = true;
+                            response.message = " Mail sent";
+                            response.content = jwtToken;
+
+                            return callback(null, response)
                         }
                     })
 
@@ -222,7 +248,8 @@ class UserModelAPI {
                 return callback(err);
             } else {
                 User.findOneAndUpdate({
-                    '_id': resetPasswordDataObject._id
+                    // 'EmailId': resetPasswordDataObject.EmailId
+                    '_id': data[0]._id
                 }, {
                     $set: {
                         'Password': hashedPassword
@@ -243,7 +270,6 @@ class UserModelAPI {
                 })
             }
         })
-
     }
 
 }

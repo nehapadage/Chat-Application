@@ -139,6 +139,9 @@ class UserController {
             let response={}
 
             if (error) {
+                response.success=false;
+                response.message="forget password failed due to validations error"
+                response.error=error
                 return res.status(200).send(response); // HTTP code 200-successful response-Ok
             } else {
                 let forgetPasswordDataObject = {
@@ -170,7 +173,8 @@ class UserController {
 
     resetPassword(req, res) {
         try {
-
+            console.log("In controller");
+            
             req.checkBody('Password', 'should not be empty').notEmpty();
             req.checkBody('Password', 'should have length 6').isLength({
                 min: 6
@@ -190,8 +194,12 @@ class UserController {
             } else {
                 let resetPasswordDataObject = {
                     Password: req.body.Password,
-                    _id:req.token._id
+                     EmailId:req.decoded.EmailId
                 }
+
+                console.log("in controller data-->",resetPasswordDataObject);
+                
+                
 
 
                 userServices.resetPasswordServices(resetPasswordDataObject, (err, data) => {

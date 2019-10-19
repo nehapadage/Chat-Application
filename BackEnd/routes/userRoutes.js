@@ -1,6 +1,7 @@
 const express = require('express');
 const routes = express.Router()
 const userController = require('../controller/userController');
+const authentication=require('/home/admin1/Desktop/Neha_Programs/chatapp/BackEnd/utility/tokenGenerator.js')
 
 console.log("In userRoutes");
 
@@ -13,10 +14,11 @@ routes.post('/register', userController.createUser);
 routes.post('/login', userController.login);
 
 // Forget Password
-routes.post('/forgetPassword', userController.forgetPassword);
+routes.post('/forgetpassword', userController.forgetPassword);
 
 // Reset Password
-routes.post('/resetPassword/:token', userController.resetPassword);
+routes.post('/resetpassword/',authentication.verifyToken,userController.resetPassword);
+
 
 
 
