@@ -136,6 +136,7 @@ class UserController {
             req.checkBody('EmailId', 'should be Valid').isEmail();
 
             let error = req.validationErrors();
+            let response={}
 
             if (error) {
                 return res.status(200).send(response); // HTTP code 200-successful response-Ok
@@ -147,9 +148,15 @@ class UserController {
                 userServices.forgetPasswordServices(forgetPasswordDataObject, (err, data) => {
                     //send response to server
                     if (err) {
-                        return res.status(422).send(err); // HTTP code 422-Client errors-unprocessable entity
+                        response.success=false;
+                        response.message = "error";
+                        response.err = err
+                        return res.status(422).send(response); // HTTP code 422-Client errors-unprocessable entity
                     } else {
-                        return res.status(200).send(data); // HTTP code 200-successful response-Ok
+                        response.success=data.success;
+                        response.message = data.message;
+                        response.data = data
+                        return res.status(200).send(response); // HTTP code 200-successful response-Ok
                     }
                 })
 
@@ -173,16 +180,34 @@ class UserController {
             });
 
             let error = req.validationErrors();
+            let response={};
 
             if (error) {
+                response.success=false;
+                response.message="Error while validating data"
+                response.error=error
                 return res.status(200).send(response); // HTTP code 200-successful response-Ok
             } else {
                 let resetPasswordDataObject = {
                     Password: req.body.Password,
+                    _id:req.token._id
                 }
 
 
-
+                userServices.resetPasswordServices(resetPasswordDataObject, (err, data) => {
+                    //send response to server
+                    if (err) {
+                        response.success=false;
+                        response.message = "error";
+                        response.err = err
+                        return res.status(422).send(response); // HTTP code 422-Client errors-unprocessable entity
+                    } else {
+                        response.success=data.success;
+                        response.message = data.message;
+                        response.data = data
+                        return res.status(200).send(response); // HTTP code 200-successful response-Ok
+                    }
+                })
 
 
 

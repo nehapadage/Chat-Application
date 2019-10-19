@@ -23,3 +23,10 @@ export function forgetpassword(forgetData){
 
     return forget;
 }
+
+export function resetpassword(resetData){
+    console.log("reset password data in services--> ", resetData)
+    var reset = axios.post(url + '/resetpassword', resetData)
+
+    return reset;
+}

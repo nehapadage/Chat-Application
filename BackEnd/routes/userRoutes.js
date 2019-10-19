@@ -1,24 +1,24 @@
-const express=require('express');
-const routes=express.Router()
+const express = require('express');
+const routes = express.Router()
 const userController = require('../controller/userController');
 
-    console.log("In userRoutes");
-    
+console.log("In userRoutes");
 
-    // Create a new user
-    routes.post('/register', userController.createUser);
-    
 
-     // Login
-     routes.post('/login', userController.login);
+// Create a new user
+routes.post('/register', userController.createUser);
 
-     // Forget Password
-     routes.post('/forgetPassword', userController.forgetPassword);
 
-    // Reset Password
-    routes.post('/resetPassword',userController.resetPassword);
+// Login
+routes.post('/login', userController.login);
 
-    
-    
+// Forget Password
+routes.post('/forgetPassword', userController.forgetPassword);
 
-    module.exports=  routes;
+// Reset Password
+routes.post('/resetPassword/:token', userController.resetPassword);
+
+
+
+
+module.exports = routes;

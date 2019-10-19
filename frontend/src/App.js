@@ -6,6 +6,7 @@ import './App.css';
 import Login from './components/login';
 import Register from './components/register'
 import ForgetPassword from './components/ForgetPassword'
+import ResetPassword from './components/ResetPassword'
 
 
 class App extends Component {
@@ -16,6 +17,7 @@ class App extends Component {
           <Route path="/" exact component={Login} />
           <Route path="/register" component={Register} />
           <Route path="/forgetpassword" component={ForgetPassword} />
+          <Route path="/resetpassword" component={ResetPassword} />
         </Router>
       </div>
     )

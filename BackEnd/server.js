@@ -40,6 +40,6 @@ mongoose.connect(dbConfig.url, {
 
 
 // listen for requests
-app.listen(4005, () => {
-    console.log("Server is listening on port 4005");
+app.listen(4006, () => {
+    console.log("Server is listening on port 4006");
 });

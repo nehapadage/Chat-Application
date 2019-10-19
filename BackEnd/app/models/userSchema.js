@@ -1,11 +1,14 @@
 const mongoose = require('mongoose')
 const bycrypt = require('bcrypt')
+const jwtTokenGenerator = require('/home/admin1/Desktop/Neha_Programs/chatapp/BackEnd/utility/tokenGenerator.js')
+const mailSender = require('/home/admin1/Desktop/Neha_Programs/chatapp/BackEnd/utility/mailSender.js')
 
 const userSchema = mongoose.Schema({
     FirstName: String,
     LastName: String,
     EmailId: String,
-    Password: String
+    Password: String,
+    Token: String
 }, {
     timestamps: true
 });
@@ -36,9 +39,9 @@ class UserModelAPI {
              * if exits terminate other logic return response
              * 
              */
-            User.find({'EmailId': createUserDataObject.EmailId
+            User.find({
+                'EmailId': createUserDataObject.EmailId
             }, (err, data) => {
-                /** if err or email already exits */
 
                 /** when error occured */
                 if (err) {
@@ -48,7 +51,7 @@ class UserModelAPI {
                     /** when email is already present  */
                     console.log("\n\n\t email already exits");
                     response.success = false;
-                    response.message="email already exits"
+                    response.message = "email already exits"
                     return callback(null, response);
                 } else {
 
@@ -71,12 +74,12 @@ class UserModelAPI {
                                 "Password": encryptedPassword
                             })
 
-                    
+
                             /** 
                              * @purpose save registration data into schema 
                              * @returns data if schema save successfully
                              */
-                            
+
                             createUserDetails.save((err, data) => {
                                 if (err) {
                                     /** send error to service callback function */
@@ -115,17 +118,31 @@ class UserModelAPI {
                     if (data.length > 0) {
                         console.log("Email matched in database");
 
-                        var response = {};
+                        // var response = {};
+                        let payload = {
+                            '_id': data[0]._id,
+                            'EmailId': data[0].EmailId
+                        }
+
+                        //get token from jwt
+                        let jwtToken = jwtTokenGenerator.generateToken(payload);
 
                         bycrypt.compare(loginDataObject.Password, data[0].Password, (err, passwordCompareResult) => {
                             if (err) {
                                 return callback(err);
                             } else {
                                 if (passwordCompareResult) {
-
+                                    console.log("Login Successful ............" + data[0].FirstName);
+                                    let response = {
+                                        '_id': data[0]._id,
+                                        'FirstName': data[0].FirstName,
+                                        'LastName': data[0].LastName,
+                                        'EmailId': data[0].EmailId,
+                                        'Token': jwtToken
+                                    }
                                     response.success = true;
                                     response.message = "Yaaa Login Successful ";
-                                    console.log("Login Successful ............" + data[0].FirstName);
+
                                     return callback(null, response)
                                 } else {
 
@@ -170,15 +187,24 @@ class UserModelAPI {
                 } else {
                     console.log("\n\n\t\t Your Password matched");
 
+                    let payload = {
+                        '_id': data[0]._id
+                    }
+
+                    //get token from jwt
+                    let jwtToken = jwtTokenGenerator.generateToken(payload);
+                    console.log("Token is : " + jwtToken.token);
+
+                    let url = "http://localhost:3000/resetPassword/" + jwtToken.token;
 
 
-                    // forgetMail.nodemailSender(userForgetPasswordDataObject, url, jwtToken.token,(err, data) => {
-                    //     if (err) {
-                    //         return callback(err)
-                    //     } else {
-                    //         return callback(null, data)
-                    //     }
-                    // })
+                    mailSender.sendMail(forgetPasswordDataObject.EmailId, url, (err, data) => {
+                        if (err) {
+                            return callback(err)
+                        } else {
+                            return callback(null, data)
+                        }
+                    })
 
                 }
             }
@@ -187,7 +213,38 @@ class UserModelAPI {
     }
 
 
+    resetPasswordUser(resetPasswordDataObject, callback) {
+        console.log("inside model password is " + resetPasswordDataObject.Password);
+        console.log("id is" + resetPasswordDataObject._id);
 
+        encryptPassword(resetPasswordDataObject.Password, (err, hashedPassword) => {
+            if (err) {
+                return callback(err);
+            } else {
+                User.findOneAndUpdate({
+                    '_id': resetPasswordDataObject._id
+                }, {
+                    $set: {
+                        'Password': hashedPassword
+                    }
+                }, (err, data) => {
+                    if (err) {
+                        console.log("update password error");
+                        return callback(err + " update password error")
+                    } else {
+                        if (data) {
+                            console.log("\n\n\t\t Password updation successfully");
+                            return callback(null, data)
+                        } else {
+                            console.log("user credential not found");
+                            return callback("user credential not found")
+                        }
+                    }
+                })
+            }
+        })
+
+    }
 
 }
 

@@ -66,6 +66,27 @@ class UserService {
 
     }
 
+    resetPasswordServices(resetPasswordDataObject,callback) {
+        try {
+            //call model method for saving forgetPassword details
+            model.resetPasswordUser(resetPasswordDataObject, (err, data) => {
+
+                //send error to controller callback function
+                if (err) {
+                    return callback(err);
+                }
+                //send data to controller callback function 
+                else {
+                    return callback(null, data);
+                }
+            })
+        } catch (error) {
+            console.log(error);
+
+        }
+
+    }
+
 }
 
 
