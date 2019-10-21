@@ -4,11 +4,24 @@ const jwtTokenGenerator = require('/home/admin1/Desktop/Neha_Programs/chatapp/Ba
 const mailSender = require('/home/admin1/Desktop/Neha_Programs/chatapp/BackEnd/utility/mailSender.js')
 
 const userSchema = mongoose.Schema({
-    FirstName: String,
-    LastName: String,
-    EmailId: String,
-    Password: String,
-    Token: String
+    FirstName: {
+        type: String,
+    required: true,
+    },
+    LastName:{
+        type: String,
+    required: true,
+    },
+    EmailId: {
+        type: String,
+    required: true,
+    unique: true,
+    lowercase: true,
+    },
+    Password: {
+        type: String,
+    required: true,
+    },
 }, {
     timestamps: true
 });
@@ -227,6 +240,7 @@ class UserModelAPI {
                             response.success = true;
                             response.message = " Mail sent";
                             response.content = jwtToken;
+                            response.data=data;
 
                             return callback(null, response)
                         }
@@ -247,9 +261,13 @@ class UserModelAPI {
             if (err) {
                 return callback(err);
             } else {
+                console.log("password-->",resetPasswordDataObject.Password);
+                
+                console.log("hash password-->",hashedPassword);
+                
                 User.findOneAndUpdate({
                     // 'EmailId': resetPasswordDataObject.EmailId
-                    '_id': data[0]._id
+                    '_id': resetPasswordDataObject._id
                 }, {
                     $set: {
                         'Password': hashedPassword

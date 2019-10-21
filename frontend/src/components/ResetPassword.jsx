@@ -39,6 +39,9 @@ class ResetPassword extends Component {
         console.log("reset data--> ", resetData)
 
         
+
+        
+        
         
         resetpassword(resetData).then((res) => {
             console.log("respnse in reset password--> ", res)

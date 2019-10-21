@@ -9,7 +9,6 @@ console.log("In userRoutes");
 // Create a new user
 routes.post('/register', userController.createUser);
 
-
 // Login
 routes.post('/login', userController.login);
 

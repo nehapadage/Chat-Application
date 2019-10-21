@@ -47,8 +47,10 @@ class Login extends Component {
                      
             if(res.data.success===true)
             alert("Login Successful-----");
+            else
+            alert("EmailId or Password is incorrect");
 
-            localStorage.setItem('token',res.data.data.token.token );
+            localStorage.setItem('LoginToken',res.data.data.token.token );
             
             
         }).catch((err) => {

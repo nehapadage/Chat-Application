@@ -47,7 +47,7 @@ class ForgetPassword extends Component {
             if(res.data.success===true)
             alert(`Link has been sent to your email id to reset the password-----`);
 
-            localStorage.setItem('token',res.data.data.content.token)
+            localStorage.setItem('ForgetToken',res.data.data.content.token)
            
           this.setRedirect();
             
