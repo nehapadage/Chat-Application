@@ -9,9 +9,36 @@ class ResetPassword extends Component {
         super(props);
         this.state = {
             password: "",
+            passwordError: "",
             redirect: false
         }
     }
+
+    validate = () => {
+        let isError=false;
+        
+        const errors={
+         passwordError : ""
+        };
+
+        if ((this.state.password.length < 6 ) || (this.state.password.length > 12) ){
+            isError=true;
+            
+            errors.passwordError = "Password length should greater than 6 and less than 12";
+          }
+    
+          this.setState({
+            ...this.state,
+            ...errors
+          });
+
+          console.log("In validate----->"+this.state);
+          
+      
+          return isError;
+      };
+ 
+
 
     setRedirect = () => {
         this.setState({
@@ -32,25 +59,38 @@ class ResetPassword extends Component {
         this.setState({ [event.target.name]: event.target.value })
     }
 
-    handleSubmitButton=()=>{
+    handleSubmitButton=(event)=>{
+
+        event.preventDefault();
+       this.validate()
+     const err = this.validate();
+
         var resetData = {};
         resetData.Password = this.state.password;
     
         console.log("reset data--> ", resetData)
 
         
-
-        
-        
-        
         resetpassword(resetData).then((res) => {
             console.log("respnse in reset password--> ", res)
-           
+
+
+         alert("Password has been reseted");  
+
+         this.setRedirect();
        
             
         }).catch((err) => {
             console.log("error in reset--> ",err)
         })
+
+        if (!err) {
+            // clear form
+            this.setState({
+              password: "",
+              passwordError: ""
+            });
+        }
     }
 
     render() {
@@ -72,7 +112,9 @@ class ResetPassword extends Component {
                     />
 
                 </div>
-                
+                <div style={{ fontSize: 12, color: "red" }}>
+            {this.state.passwordError}
+          </div>
                 <div>
                 {this.renderRedirect()}
                     <Button

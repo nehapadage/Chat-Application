@@ -9,9 +9,35 @@ class ForgetPassword extends Component {
         super(props);
         this.state = {
             email: "",
+            emailError: "",
             redirect: false
         }
     }
+
+    validate = () => {
+        let isError=false;
+        
+        const errors={
+         emailError : ""
+        };
+
+        if (!this.state.email.includes("@")) {
+            isError=true;
+          errors.emailError = "Requires valid email";
+        }
+
+          
+          this.setState({
+            ...this.state,
+            ...errors
+          });
+
+          console.log("In validate----->"+this.state);
+          
+      
+          return isError;
+      };
+ 
 
 
     setRedirect = () => {
@@ -32,7 +58,12 @@ class ForgetPassword extends Component {
         this.setState({ [event.target.name]: event.target.value })
     }
 
-    handleSubmitButton=()=>{
+    handleSubmitButton=(event)=>{
+
+        event.preventDefault();
+       this.validate()
+     const err = this.validate();
+
         var forgetData = {};
         forgetData.EmailId = this.state.email;
     
@@ -42,12 +73,14 @@ class ForgetPassword extends Component {
         
         forgetpassword(forgetData).then((res) => {
             console.log("respnse in forget password--> ", res)
-            console.log("****respnse in forget password token is--> ", res.data.data.content.token)
+            console.log("****respnse in forget password token is--> ", res.data.data.content)
 
             if(res.data.success===true)
             alert(`Link has been sent to your email id to reset the password-----`);
+            else
+            alert('Entered EmailId is not in database.....Please Register first')
 
-            localStorage.setItem('ForgetToken',res.data.data.content.token)
+            localStorage.setItem('ForgetToken',res.data.data.content)
            
           this.setRedirect();
             
@@ -55,6 +88,14 @@ class ForgetPassword extends Component {
         }).catch((err) => {
             console.log("error in forget password--> ",err)
         })
+
+        if (!err) {
+            // clear form
+            this.setState({
+              email: "",
+              emailError: ""
+            });
+        }
     }
 
     render() {
@@ -76,7 +117,9 @@ class ForgetPassword extends Component {
                     />
 
                 </div>
-                
+                <div style={{ fontSize: 12, color: "red" }}>
+            {this.state.emailError}
+          </div>
                 <div>
                 {this.renderRedirect()}
                     <Button

@@ -14,10 +14,43 @@ class Login extends Component {
         this.state = {
 
             email: "",
-            password: ""
+            password: "",
+            emailError: "",
+            passwordError: ""
 
         }
     }
+
+    validate = () => {
+        let isError=false;
+        
+        const errors={
+         emailError : "",
+         passwordError : ""
+        };
+
+        if (!this.state.email.includes("@")) {
+            isError=true;
+          errors.emailError = "Requires valid email";
+        }
+
+        if ((this.state.password.length < 6 ) || (this.state.password.length > 12) ){
+            isError=true;
+            
+            errors.passwordError = "Password length should greater than 6 and less than 12";
+          }
+    
+          this.setState({
+            ...this.state,
+            ...errors
+          });
+
+          console.log("In validate----->"+this.state);
+          
+      
+          return isError;
+      };
+ 
 
     handlechangeall = (event) => {
         this.setState({ [event.target.name]: event.target.value })
@@ -30,7 +63,12 @@ class Login extends Component {
         this.props.history.push(path)
     }
 
-    handleloginSubmit = () => {
+    handleloginSubmit = (event) => {
+
+        event.preventDefault();
+       this.validate()
+     const err = this.validate();
+
         var loginData = {};
         loginData.EmailId = this.state.email;
         loginData.Password = this.state.password
@@ -51,11 +89,23 @@ class Login extends Component {
             alert("EmailId or Password is incorrect");
 
             localStorage.setItem('LoginToken',res.data.data.token.token );
+
+            // this.clearField();
             
             
         }).catch((err) => {
             console.log("error in login--> ",err)
         })
+
+        if (!err) {
+            // clear form
+            this.setState({
+              email: "",
+              emailError: "",
+              password: "",
+              passwordError: ""
+            });
+        }
     }
 
     handleforgetPasswordSubmit=()=>{
@@ -63,6 +113,8 @@ class Login extends Component {
         var path = '/forgetpassword'
         this.props.history.push(path)
     }
+
+
 
     render() {
         return (
@@ -81,9 +133,14 @@ class Login extends Component {
                         margin="normal"
                         variant="outlined"
                         onChange={this.handlechangeall}
+                        errorText={this.state.emailError}
+                        
                     />
 
                 </div>
+                <div style={{ fontSize: 12, color: "red" }}>
+            {this.state.emailError}
+          </div>
                 <div>
                     <TextField
                         id="password"
@@ -95,8 +152,12 @@ class Login extends Component {
                         margin="normal"
                         variant="outlined"
                         onChange={this.handlechangeall}
+                        
                     />
                 </div>
+                <div style={{ fontSize: 12, color: "red" }}>
+            {this.state.passwordError}
+          </div>
                 <div>
 
                     <Button
@@ -114,6 +175,7 @@ class Login extends Component {
                         variant="contained"
                         color="primary"
                         onClick={this.handleloginSubmit}
+                      
                     >
                         Log In
                     </Button>
@@ -136,6 +198,7 @@ class Login extends Component {
                     </Button>
                 </div>
             </div>
+            
         )
     }
 }
