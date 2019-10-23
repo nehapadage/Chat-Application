@@ -136,6 +136,24 @@ class UserService {
 
     }
 
+    getAllUsersServices(callback){
+        try{
+            model.getAllUsers((err, data) => {
+
+                //send error to controller callback function
+                if (err) {
+                    return callback(err);
+                }
+                //send data to controller callback function 
+                else {
+                    return callback(null, data);
+                }
+            })
+        }catch(err){
+            console.log(err);  
+        }
+    }
+
 }
 
 

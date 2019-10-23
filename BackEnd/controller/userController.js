@@ -229,5 +229,30 @@ class UserController {
         }
     }
 
+    getAllUsers(req,res){
+        try{
+            userServices.getAllUsersServices( (err, data) => {
+                //send response to server
+                var response={};
+                if (err) {
+                    response.success = false;
+                    response.message = "error";
+                    response.err = err
+                    return res.status(422).send(response); // HTTP code 422-Client errors-unprocessable entity
+                } else {
+                    response.success = data.success;
+                    response.message = data.message;
+                    response.data = data
+                    console.log("Callback Response in controller------->"+response.data);
+                    
+                    return res.status(200).send(response); // HTTP code 200-successful response-Ok
+                }
+            })
+        }
+        catch(err){
+            console.log(err);
+        }
+    }
+
 }
 module.exports = new UserController();

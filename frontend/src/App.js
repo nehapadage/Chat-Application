@@ -7,6 +7,7 @@ import Login from './components/login';
 import Register from './components/register'
 import ForgetPassword from './components/ForgetPassword'
 import ResetPassword from './components/ResetPassword'
+import ChatApp from './components/chatapp';
 
 
 class App extends Component {
@@ -18,7 +19,9 @@ class App extends Component {
           <Route path="/register" component={Register} />
           <Route path="/forgetpassword" component={ForgetPassword} />
           <Route path="/resetpassword" component={ResetPassword} />
+          <Route path="/chatapp" component={ChatApp} />
         </Router>
+    
       </div>
     )
   }

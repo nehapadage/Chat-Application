@@ -251,6 +251,28 @@ class UserModelAPI {
         })
     }
 
+    getAllUsers(callback){
+        try{
+            User.find({ },(err, data) => {
+                var response={};
+                if (err) {
+                    response.success = false;
+                    response.message = " Error";
+                    response.error = err;
+    
+                    return callback(response)
+    
+                } else {
+                  //  console.log("All users-----> " + data);
+                    return callback(null,data);
+                }
+
+                })
+        }catch(err){
+            console.log(err);     
+        }
+    }
+
 }
 
 module.exports = new UserModelAPI()

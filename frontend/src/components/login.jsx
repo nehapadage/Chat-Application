@@ -83,8 +83,11 @@ class Login extends Component {
             console.log("****respnse in login token is--> ", res.data.data.token.token)
 
                      
-            if(res.data.success===true)
+            if(res.data.success===true){
             alert("Login Successful-----");
+            var path = '/chatapp'
+        this.props.history.push(path)
+            }
             else
             alert("EmailId or Password is incorrect");
 

@@ -38,3 +38,9 @@ export function resetpassword(resetData) {
 
     return reset;
 }
+
+export function getallusers() {
+    var users = axios.post(url + '/getallusers')
+
+    return users;
+}

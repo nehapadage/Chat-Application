@@ -101,7 +101,6 @@ class ForgetPassword extends Component {
     render() {
         return (
             <div className="maindiv">
-                <form onSubmit={this.handlesubmit} ></form>
                 <div id="login"> Forget Password </div>
                 <div>
                     <TextField
