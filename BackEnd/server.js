@@ -3,6 +3,8 @@ const bodyParser = require('body-parser');
 const route=require("./routes/userRoutes")
 const expressValidator=require('express-validator')
 var cors = require('cors')
+var socketIO = require('socket.io');
+var chatController=require('./controller/chatController')
 
 
 
@@ -40,7 +42,39 @@ mongoose.connect(dbConfig.url, {
 
 
 // listen for requests
-app.listen(3000, () => {
+var server=app.listen(3000, () => {
     console.log("Server is listening on port 3000");
 });
  
+const io=socketIO(server);
+
+// Listen 'connection' event, which is automatically send by the web client (no need to define it)
+io.on('connection', (socket) => 
+{
+    console.log('user is connected');
+
+    // Listen 'chat message' event, which is sent by the web client while sending request
+    socket.on('chat messages', function(message) {
+        console.log(`Received message: ${message}`);
+
+        chatController.sendMessage(message, (err, data) =>
+        {
+            if(err)
+            {
+                console.log("Error..", err);
+            }
+            else
+            {
+                console.log("chat message",data);
+
+                //Sending to all connected clients
+                // Emit event to all connected users. The second parameter should be the content of the message
+                io.emit('chat message', message);
+            }
+        })
+    })
+
+    socket.on('disconnect' , ()=> {
+        console.log("user is disconnected");
+    })
+});

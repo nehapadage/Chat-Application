@@ -140,15 +140,16 @@ class UserModelAPI {
                             } else {
                                 if (passwordCompareResult) {
                                     console.log("Login Successful ............" + data);
-                                    let response = {
-                                        '_id': data._id,
-                                        'FirstName': data.FirstName,
-                                        'LastName': data.LastName,
-                                        'EmailId': data.EmailId,
+                                    let result = {
+                                        '_id': data[0]._id,
+                                        'FirstName': data[0].FirstName,
+                                        'LastName': data[0].LastName,
+                                        'EmailId': data[0].EmailId,
                                     
                                     }
                                     response.success = true;
                                     response.message = "Yaaa Login Successful ";
+                                    response.data=result
 
                                     return callback(null, response)
                                 } else {

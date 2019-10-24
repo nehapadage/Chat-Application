@@ -115,8 +115,9 @@ class UserController {
                     } else {
                         response.success = data.success;
                         response.message = data.message;
+                       
                         response.data = data
-                        return res.status(200).send(response); // HTTP code 200-successful response-Ok
+                        return res.status(200).send(data); // HTTP code 200-successful response-Ok
                     }
                 })
 

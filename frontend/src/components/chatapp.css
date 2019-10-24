@@ -40,7 +40,7 @@
 #headText{
     font-style: normal;
     font-size: larger;
-    margin-top: 22px;
+    margin-top: 5px;
     font-family: serif;
     font-weight: bold;
     margin-left: 510px;
@@ -51,16 +51,31 @@
     width : 20%;
     display: flex;
     height: 550px;
+    flex-direction: column;
 }
 .input{
-    margin-left: 150%;
-    margin-top: 280%;
-    width: 339%;
-    height: 5%;
+    margin-left: 129%;
+    margin-top: 120%;
+    width: 316%;
+    height: 7%;
 }
 .sendButton{
-    margin-left: 1589%;
-    margin-top: 1127%;
+    margin-left: 884px;
+    margin-top: -8px;
     width: 190%;
     height: 6%;
 }
+
+.sideNavButton{
+    height: 25px;
+    width: 100px;
+}
+
+
+.buttonStyle{
+    /* margin-left: 129%;
+    margin-top: 135%; */
+    margin-left: 129%;
+    margin-top: 10%;
+    width: 316%;
+    height: 7%;}
