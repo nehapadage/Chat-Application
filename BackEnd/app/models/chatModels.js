@@ -32,6 +32,8 @@ class ChatModelAPI{
 sendMessage(sendMessageObject,callback){
  
     try{
+        console.log("In chat model");
+        
         Chat.find({
             'SenderId': sendMessageObject.SenderId
         }, (err, data) => {
@@ -52,6 +54,8 @@ sendMessage(sendMessageObject,callback){
                             "Messages":sendMessageObject.Messages
                         })
 
+                        console.log("Saving message");
+                        
 
                         sendMessageDetails.save((err, data) => {
                             if (err) {
@@ -61,6 +65,7 @@ sendMessage(sendMessageObject,callback){
                                 /** send message and data to service callback function */
                                 var response={};
                                 response.success = true;
+                                response.data=data;
                                 console.log("Message sent Successfully ............" + data.SenderName);
                                 return callback(null, response)
 

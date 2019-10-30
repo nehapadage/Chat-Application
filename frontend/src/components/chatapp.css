@@ -46,24 +46,69 @@
     margin-left: 510px;
 }
 
+
+
+#field{
+    align-items: center;
+    display: flow-root;
+    justify-content: center;
+}
+
+#ReceiverName{
+    background-color: red;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    width: 135%;
+    height: 70px;
+}
+
+#ReceiverNameText{
+    display: flex;
+    align-items: center;
+}
+
+#chatField{
+    background-color: YELLOW;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    width: 133%;
+    height: 410px;
+}
+
 .sideNav{
-    background-color:rgb(174, 198, 214);
+    background-color:rgb(0, 152, 253);
     width : 20%;
     display: flex;
     height: 550px;
     flex-direction: column;
 }
+
+.messageField{
+    background-color:rgb(59, 194, 115);
+
+    display: flex;
+
+    /* width : 20%;
+    display: flex;
+    height: 500px;
+    flex-direction: column; */
+}
+
+
+
 .input{
-    margin-left: 129%;
-    margin-top: 120%;
-    width: 316%;
-    height: 7%;
+    margin-left: -74px;
+    margin-top: 0px;
+    width: 700px;
+    height: 25px;
 }
 .sendButton{
-    margin-left: 884px;
-    margin-top: -8px;
-    width: 190%;
-    height: 6%;
+    margin-top: 17px;
+    margin-left: 736px;
 }
 
 .sideNavButton{
@@ -72,10 +117,3 @@
 }
 
 
-.buttonStyle{
-    /* margin-left: 129%;
-    margin-top: 135%; */
-    margin-left: 129%;
-    margin-top: 10%;
-    width: 316%;
-    height: 7%;}

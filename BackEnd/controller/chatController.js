@@ -21,11 +21,13 @@ class chatController{
                     response.success = false;
                     response.message = "error";
                     response.err = err
+                    // return callback(err)
                     return res.status(422).send(response); // HTTP code 422-Client errors-unprocessable entity
                 } else {
                     response.success = data.success;
                     response.message = data.message;
                     response.data = data
+                    // return callback(null,response)
                     return res.status(200).send(response); // HTTP code 200-successful response-Ok
                 }
             })

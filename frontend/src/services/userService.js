@@ -1,8 +1,13 @@
+let socket = require('socket.io-client')('http://localhost:3001');
+
+
 const axios = require('axios');
 
 var url = "http://localhost:3000"
 
 var myToken = localStorage.getItem('ForgetToken');
+
+
 
 //this flow goes to router in backend
 export function login(loginData) {
@@ -43,4 +48,12 @@ export function getallusers() {
     var users = axios.post(url + '/getallusers')
 
     return users;
+}
+
+export function senMsgApi(msgObj){
+    axios.post(url+"/sendmessage",msgObj)
+
+socket.emit("chat message",msgObj)
+
+
 }

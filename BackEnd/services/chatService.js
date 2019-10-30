@@ -3,6 +3,8 @@ const chatModel=require('../app/models/chatModels')
 class chatServices{
     sendMessageServices(sendMessageObject,callback){
         try{
+            console.log("In chat service");
+            
             //call model method for saving send message details
             chatModel.sendMessage(sendMessageObject, (err, data) => {
 
