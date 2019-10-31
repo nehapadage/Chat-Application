@@ -42,22 +42,47 @@ mongoose.connect(dbConfig.url, {
 
 
 // listen for requests
-var server=app.listen(3000, () => {
-    console.log("Server is listening on port 3000");
+var server = app.listen(4000, () => {
+    console.log("Server is listening on port 4000");
 });
  
 const io=socketIO(server);
-
 // Listen 'connection' event, which is automatically send by the web client (no need to define it)
+
+
 io.on('connection', (socket) => 
 {
-    console.log('user is connected');
-
+ console.log("user connected");
+ 
+ 
     // Listen 'chat message' event, which is sent by the web client while sending request
-    socket.on('chat messages', function(message) {
-        console.log(`Received message: ${message}`);
+    // socket.on('chat messages', function(message) {
 
-        chatController.sendMessage(message, (err, data) =>
+    //     console.log(`............Received message: ${message}`);
+
+    //     chatController.sendMessage(message, (err, data) =>
+    //     {
+    //         if(err)
+    //         {
+    //             console.log("Error..", err);
+    //         }
+    //         else
+    //         {
+    //             console.log("chat message",data);
+
+    //             //Sending to all connected clients
+    //             // Emit event to all connected users. The second parameter should be the content of the message
+    //             io.emit('chat messages', message);
+    //         }
+    //     })
+    // })
+
+    socket.on("newMsg",function(msg){
+        console.log("==========================Received message:=====================",msg);
+
+      
+
+        chatController.sendMessage(msg, (err, data) =>
         {
             if(err)
             {
@@ -65,16 +90,19 @@ io.on('connection', (socket) =>
             }
             else
             {
-                console.log("chat message",data);
+                console.log("user data ",data);
 
                 //Sending to all connected clients
                 // Emit event to all connected users. The second parameter should be the content of the message
-                io.emit('chat message', message);
+                io.emit('chat messages', data.Messages);
             }
         })
+       
+
     })
 
     socket.on('disconnect' , ()=> {
         console.log("user is disconnected");
     })
+        
 });

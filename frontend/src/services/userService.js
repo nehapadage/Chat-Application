@@ -1,9 +1,9 @@
-let socket = require('socket.io-client')('http://localhost:3001');
+let socket = require('socket.io-client')('http://localhost:4000');
 
 
 const axios = require('axios');
 
-var url = "http://localhost:3000"
+var url = "http://localhost:4000"
 
 var myToken = localStorage.getItem('ForgetToken');
 
@@ -53,7 +53,13 @@ export function getallusers() {
 export function senMsgApi(msgObj){
     axios.post(url+"/sendmessage",msgObj)
 
-socket.emit("chat message",msgObj)
-
-
+socket.on("chat messages",msgObj)
 }
+
+export function getAllMessages(){
+    var messages = axios.post(url + '/receivedmessages')
+
+    return messages;
+}
+
+

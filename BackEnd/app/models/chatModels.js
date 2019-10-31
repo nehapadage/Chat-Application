@@ -63,11 +63,11 @@ sendMessage(sendMessageObject,callback){
                                 return callback(err)
                             } else {
                                 /** send message and data to service callback function */
-                                var response={};
-                                response.success = true;
-                                response.data=data;
+                                // var response={};
+                                // response.success = true;
+                                // response.data=data;
                                 console.log("Message sent Successfully ............" + data.SenderName);
-                                return callback(null, response)
+                                return callback(null, data)
 
 
                             }
@@ -92,7 +92,7 @@ receivedMessages(callback){
                 return callback(response)
 
             } else {
-                console.log("All users and messages in Chat Model-----> " + data);
+                // console.log("All users and messages in Chat Model-----> " + data);
                 return callback(null,data);
             }
 

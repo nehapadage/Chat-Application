@@ -84,14 +84,15 @@ class Login extends Component {
             console.log("data of login user--->" + res.data.data.FirstName);
 
 
-            if (res.data.token.success === true) {
+            if (res.data.success === true) {
                 alert("Login Successful-----");
                 var path = '/chatapp'
                 this.props.history.push(path)
             }
             else
+            {
                 alert("EmailId or Password is incorrect");
-
+            }
             localStorage.setItem('LoginToken', res.data.token.token);
             localStorage.setItem('SenderName', res.data.data.FirstName);
             localStorage.setItem('SenderId', res.data.data._id);
