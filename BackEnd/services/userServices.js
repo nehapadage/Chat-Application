@@ -85,7 +85,7 @@ class UserService {
                     let jwtToken = jwtTokenGenerator.generateToken(payload);
                     console.log("Token is : " + jwtToken.token);
 
-                    let url = "http://localhost:3001/resetpassword/" + jwtToken.token;
+                    let url = "http://localhost:3000/resetpassword/" + jwtToken.token;
 
 
                     mailSender.sendMail(forgetPasswordDataObject.EmailId, url, (err, resp) => {

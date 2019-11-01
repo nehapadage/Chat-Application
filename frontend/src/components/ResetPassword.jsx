@@ -71,9 +71,13 @@ class ResetPassword extends Component {
         console.log("reset data--> ", resetData)
 
         
-        resetpassword(resetData).then((res) => {
+        let resetToken=this.props.match.params.token
+        console.log(resetToken);
+        
+        resetpassword(resetData,resetToken).then((res) => {
             console.log("respnse in reset password--> ", res)
 
+          
 
          alert("Password has been reseted");  
 

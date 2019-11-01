@@ -5,7 +5,7 @@ const axios = require('axios');
 
 var url = "http://localhost:4000"
 
-var myToken = localStorage.getItem('ForgetToken');
+// var myToken = localStorage.getItem('ForgetToken');
 
 
 
@@ -31,11 +31,11 @@ export function forgetpassword(forgetData) {
     return forget;
 }
 
-export function resetpassword(resetData) {
+export function resetpassword(resetData,myToken) {
     console.log("reset password data in services--> ", resetData)
-    console.log("token ----->", myToken);
+    console.log("token ----->",myToken );
 
-    var reset = axios.post(url + '/resetpassword/', resetData, {
+    var reset = axios.post(url + '/resetpassword', resetData, {
         headers: {
             token: myToken
         }
@@ -50,11 +50,7 @@ export function getallusers() {
     return users;
 }
 
-export function senMsgApi(msgObj){
-    axios.post(url+"/sendmessage",msgObj)
 
-socket.on("chat messages",msgObj)
-}
 
 export function getAllMessages(){
     var messages = axios.post(url + '/receivedmessages')

@@ -94,7 +94,8 @@ io.on('connection', (socket) =>
 
                 //Sending to all connected clients
                 // Emit event to all connected users. The second parameter should be the content of the message
-                io.emit('chat messages', data.Messages);
+                io.emit('chat message', data);
+
             }
         })
        

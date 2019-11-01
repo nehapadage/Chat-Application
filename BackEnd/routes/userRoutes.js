@@ -17,13 +17,13 @@ routes.post('/login', userController.login);
 routes.post('/forgetpassword', userController.forgetPassword);
 
 // Reset Password
-routes.post('/resetpassword/',authentication.verifyToken,userController.resetPassword);
+routes.post('/resetpassword',authentication.verifyToken,userController.resetPassword);
 
 //Get All Users
 routes.post('/getallusers',userController.getAllUsers);
 
-//Send Message
-routes.post('/sendmessage',chatController.sendMessage);
+// //Send Message
+// routes.post('/sendmessage',chatController.sendMessage);
 
 //Receive Messages
 routes.post('/receivedmessages',chatController.receivedMessages)

@@ -8,12 +8,6 @@ class APIFunc {
     socketCon(){
 
         console.log("inside socket connection...");
-        
-       
-        const endpoint = {
-            response: false,
-            endpoint: "http://localhost:4000"
-        }
 
         socket = socketIO("http://localhost:4000")
     }
@@ -25,11 +19,13 @@ class APIFunc {
         }
 
 
-        // io.on('chat messages', function(message){
-        //     console.log("Returned message ",message);
+        receivedMsg(callback){
+            socket.on("chat message", data =>{
+            return callback(null,data)
             
-        // });
-
+            });
+       
+        }
 
 
 }

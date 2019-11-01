@@ -3,10 +3,7 @@
     font-family: 'Roboto',sans-serif;
 }
 
-.overflow-scrolling {
-    overflow: auto;
-    -webkit-overflow-scrolling: touch;
-}
+
 
 .LogOutButton{
     margin-left: 450px;
@@ -50,6 +47,15 @@
     margin-left: 510px;
 }
 
+#sendername{
+    font-style: normal;
+    font-size: larger;
+    margin-top: 15px;
+    font-family: serif;
+    font-weight: bold;
+    margin-left: 0px;
+}
+
 
 
 #field{
@@ -59,7 +65,7 @@
 }
 
 #ReceiverName{
-    background-color: red;
+    background-color: #de997e;;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -74,24 +80,25 @@
 }
 
 #chatField{
-    background-color: YELLOW;
+    background-color: #388278;;
     display: flex;
     overflow-y: scroll;
     flex-direction: column;
-    width: 133%;
+    width: 135%;
     height: 410px;
 }
 
 .sideNav{
-    background-color:rgb(0, 152, 253);
+    background-color:rgb(178, 217, 243);
     width : 20%;
     display: flex;
     height: 550px;
     flex-direction: column;
+    overflow-y: scroll;
 }
 
 .messageField{
-    background-color:rgb(59, 194, 115);
+    background-color:rgb(224, 221, 245);
 
     display: flex;
 
@@ -122,6 +129,15 @@
     margin-left: 736px;
 }
 
+#send{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: -48px;
+    width: 45px;
+    height: 31px;
+}
+
 .sideNavButton{
     height: 25px;
     width: 100px;
@@ -136,7 +152,7 @@
 
 }
 .reciverMessage{
-    align-self: flex-end;
+    align-self: flex-start;
     height: 20px;
     margin: 10px;
     padding: 10px;

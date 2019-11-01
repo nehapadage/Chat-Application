@@ -80,7 +80,7 @@ class ForgetPassword extends Component {
             else
             alert('Entered EmailId is not in database.....Please Register first')
 
-            localStorage.setItem('ForgetToken',res.data.data.content)
+            // localStorage.setItem('ForgetToken',res.data.data.content)
            
           this.setRedirect();
             

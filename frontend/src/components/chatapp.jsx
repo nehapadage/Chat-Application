@@ -1,15 +1,10 @@
 import React, { Component } from 'react';
-import OverflowScrolling from 'react-overflow-scrolling';
 import './chatapp.css'
 import { getallusers } from '../services/userService'
-import socketIoClient from 'socket.io-client';
-import { senMsgApi } from '../services/userService'
 import { getAllMessages } from '../services/userService'
 import Message from '../components/Message'
+import apiFunc from './ApiFunc'
 
- import apiFunc from './ApiFunc'
-
-let socket;
 // import TextField from '@material-ui/core/TextField';
 // import Button from '@material-ui/core/Button';
 
@@ -22,33 +17,34 @@ class ChatApp extends Component {
             messages: "",
             ReceiverId: "",
             ReceiverName: "",
-            Messages: []
+            Messages: [],
+            ReceivedMessages: [],
+            redirect: false
         }
     }
 
+    setRedirect = () => {
+        this.setState({
+          redirect: true
+        })
+        
+      }
 
 
-    // socketConnection() {
+      renderRedirect = () => {
+        if (this.state.redirect) {
+            var path = '/'
+            this.props.history.push(path)
+        }
+      }
 
-    //     const endpoint = {
-    //         response: false,
-    //         endpoint: "http://localhost:4000"
-    //     }
 
-    //    socket = socketIoClient(endpoint)
-               
-    //  socket.emit('chatmsg', sendObject);
-    //     socket.emit("chatmsg",(sendObject)=>{
-    //         console.log("emitted....")
-    //     })
-     
-    // }
 
     async handleReceiverClick(FirstName, _id) {
-        console.log("In handle Receiver click" + JSON.stringify([this.state.Names]));
+        // console.log("In handle Receiver click" + JSON.stringify([this.state.Names]));
 
-        console.log("\n\n\tname-->", FirstName)
-        console.log("\n\n\tid-->", _id)
+        // console.log("\n\n\tname-->", FirstName)
+        // console.log("\n\n\tid-->", _id)
 
         // let sendObject = {
         //     SenderId: localStorage.getItem('SenderId'),
@@ -72,9 +68,107 @@ class ChatApp extends Component {
 
     componentDidMount() {
 
-    // this.socketConnection()
- apiFunc.socketCon()
-        
+
+
+        // this.socketConnection()
+        apiFunc.socketCon()
+
+        this.getUsers()
+        // getallusers().then((res) => {
+        //     console.log("respnse in chat app get all users--> ", res)
+        //     console.log("only users------>", res.data.data);
+
+        //     this.setState({
+        //         Names: res.data.data
+        //     })
+
+
+
+        // }).catch((err) => {
+        //     console.log("error in login--> ", err)
+        // })
+
+        this.getMessages()
+        // getAllMessages().then((res) => {
+        //     console.log("respnse in chat app get all messages--> ", res)
+        //     console.log("User data with messages------>", res.data.data);
+
+        //     this.setState({
+        //         Messages: res.data.data
+        //     })
+
+
+
+        // }).catch((err) => {
+        //     console.log("error in login--> ", err)
+        // })
+
+        //================================================================
+        apiFunc.receivedMsg((error, result) => {
+
+            if (result) {
+
+                console.log("result is back...", result);
+
+                // console.log("in result receiverID", result.ReceiverId);
+                // console.log("in result local storage ID", localStorage.getItem('SenderId'));
+
+                // console.log((localStorage.getItem('SenderId') === result.ReceiverId));
+
+                // if ((localStorage.getItem('SenderId') == result.ReceiverId)) {
+
+                //     let array = []
+
+                //     array = this.state.Messages
+
+                //     console.log("Array is ", JSON.stringify(array));
+
+
+                //     array.push(result.Messages)
+
+                //     this.setState({
+                //         Messages: array
+                //     })
+
+                // }
+                // // if(){
+
+                // }
+
+                var resultArray = [];
+                // resultArray.push(result);
+                resultArray = this.state.Messages;
+
+                resultArray.push(result)
+
+                this.setState({
+                    Messages: resultArray
+                })
+
+                // this.exchange();
+
+
+
+
+                // this.setState({ReceivedMessages:result});
+
+                // this.state.ReceivedMessages.push(result);
+
+                console.log("Received Messages are---->", JSON.stringify(this.state.Messages));
+
+
+            }
+            else {
+                console.log("Error in received message--->", error);
+
+            }
+        })
+
+
+
+    }
+
+    getUsers = () => {
         getallusers().then((res) => {
             console.log("respnse in chat app get all users--> ", res)
             console.log("only users------>", res.data.data);
@@ -82,13 +176,12 @@ class ChatApp extends Component {
             this.setState({
                 Names: res.data.data
             })
-
-
-
         }).catch((err) => {
             console.log("error in login--> ", err)
         })
+    }
 
+    getMessages = () => {
         getAllMessages().then((res) => {
             console.log("respnse in chat app get all messages--> ", res)
             console.log("User data with messages------>", res.data.data);
@@ -96,16 +189,9 @@ class ChatApp extends Component {
             this.setState({
                 Messages: res.data.data
             })
-
-
-
         }).catch((err) => {
             console.log("error in login--> ", err)
         })
-
-
-
-
     }
 
     handlechangeall = (event) => {
@@ -126,20 +212,92 @@ class ChatApp extends Component {
             Messages: this.state.messages
         }
 
-        apiFunc.Emitfun(sendObject);
+
 
         console.log("sendObject------->" + JSON.stringify(sendObject));
 
-        
+        apiFunc.Emitfun(sendObject);
 
+        // apiFunc.receivedMsg((error, result) => {
+
+        //     if (result) {
+
+        //         console.log("result is back...", result);
+
+        //         console.log("in result receiverID",result.ReceiverId);
+        //         console.log("in result local storage ID",localStorage.getItem('SenderId'));
+
+        //         console.log((localStorage.getItem('SenderId') === result.ReceiverId));
+
+        //         if((localStorage.getItem('SenderId') == result.ReceiverId))
+        //         {
+        //             let array = []
+
+        //             array = this.state.Messages
+
+        //             array.push(result.Messages)
+
+        //             this.setState({
+        //                 Messages: array
+        //             })
+
+        //         }
+        //         // if(){
+
+        //         // }
+
+        //         var resultArray = [];
+        //         // resultArray.push(result);
+        //         resultArray = this.state.Messages;
+
+        //         resultArray.push(result)
+
+        //         this.setState({
+        //             Messages: resultArray
+        //         })
+
+        //         // this.exchange();
+
+
+
+
+        //         // this.setState({ReceivedMessages:result});
+
+        //         // this.state.ReceivedMessages.push(result);
+
+        //         console.log("Received Messages are---->", JSON.stringify(this.state.Messages));
+
+
+        //     }
+        //     else {
+        //         console.log("Error in received message--->", error);
+
+        //     }
+        // })
+
+
+        this.getMessages()
         // senMsgApi(sendObject)
+
 
 
     }
 
+    logOutClick(){
+        localStorage.clear();
+        this.setRedirect();
+    }
+
+
+    // exchange = async() => {
+
+    //     await this.setState({ReceiverId:localStorage.getItem('SenderId')},
+    //             {ReceiverName:localStorage.getItem('SenderName')})
+    // }
 
 
     render() {
+
 
         var mapUserResult = this.state.Names.map(item => {
             return (
@@ -149,13 +307,14 @@ class ChatApp extends Component {
         })
 
         var mapMessageResult = this.state.Messages.map(item => {
-            if ((item.SenderId === localStorage.getItem('SenderId')) && item.ReceiverId === this.state.ReceiverId) {
-                console.log("iten in if " + item.Messages);
+            if ((((item.SenderId === localStorage.getItem('SenderId')) && item.ReceiverId === this.state.ReceiverId)) || ((item.SenderId === this.state.ReceiverId && item.ReceiverId === localStorage.getItem('SenderId')))) {
+                console.log("item in if " + item.Messages);
 
                 return (
 
-                        <Message senderIdItem={item.SenderId} MessagesItem={item.Messages} /> 
-           
+                    <Message senderIdItem={item.SenderId} MessagesItem={item.Messages} />
+
+
                 );
             }
         })
@@ -165,51 +324,52 @@ class ChatApp extends Component {
 
 
         return (
-            <OverflowScrolling className='overflow-scrolling'>
-                <div className="mainchatdiv">
-                    <div id="header">
-                        <div id="headText">Chat Application</div>
-                        <div>
-                            <button class="LogOutButton">Log Out</button>
-                        </div>
+
+            <div className="mainchatdiv">
+                <div id="header">
+                    <div id="sendername">{localStorage.getItem('SenderName')}</div>
+                    <div id="headText">Chat Application</div>
+                    <div>
+                    {this.renderRedirect()}
+                        <button class="LogOutButton" onClick={() => this.logOutClick()}>Log Out</button>
                     </div>
-                    <div className="messageField">
-                        <div class="sideNav">
+                </div>
+                <div className="messageField">
+                    <div class="sideNav">
 
-                            {mapUserResult}
+                        {mapUserResult}
 
-
-
-                        </div>
-                        <div id="field">
-                            <div id="ReceiverName">
-                                <div id="ReceiverNameText">{this.state.ReceiverName}.</div>
-                            </div>
-                            <div id="chatField">
-                                {mapMessageResult}
-                            </div>
-
-                          
-                            <div id='inputField'>
-                                <input class="input"
-
-                                    onChange={this.handlechangeall}
-                                    name="messages"
-                                    value={this.state.messages}
-                                    placeholder="type here" ></input>
-                                <div className="sendButton">
-                                    <button onClick={() => this.sendClick()}>Send</button>
-
-                                </div>
-                            </div>
-                        </div>
 
 
                     </div>
+                    <div id="field">
+                        <div id="ReceiverName">
+                            <div id="ReceiverNameText">{this.state.ReceiverName}.</div>
+                        </div>
+                        <div id="chatField">
+                            {mapMessageResult}
+                        </div>
+
+
+                        <div id='inputField'>
+                            <input class="input"
+
+                                onChange={this.handlechangeall}
+                                name="messages"
+                                value={this.state.messages}
+                                placeholder="type here" ></input>
+                            <div className="sendButton">
+                                <button id="send" onClick={() => this.sendClick()}>Send</button>
+
+                            </div>
+                        </div>
+                    </div>
+
 
                 </div>
 
-            </OverflowScrolling>
+            </div>
+
 
         )
     }
