@@ -6,21 +6,21 @@ const bycrypt = require('bcrypt')
 const userSchema = mongoose.Schema({
     FirstName: {
         type: String,
-    required: true,
+        required: true,
     },
-    LastName:{
+    LastName: {
         type: String,
-    required: true,
+        required: true,
     },
     EmailId: {
         type: String,
-    required: true,
-    unique: true,
-    lowercase: true,
+        required: true,
+        unique: true,
+        lowercase: true,
     },
     Password: {
         type: String,
-    required: true,
+        required: true,
     },
 }, {
     timestamps: true
@@ -120,6 +120,7 @@ class UserModelAPI {
 
     loginUser(loginDataObject, callback) {
         try {
+            var response = {};
             User.find({
                 'EmailId': loginDataObject.EmailId
             }, (err, data) => {
@@ -131,8 +132,8 @@ class UserModelAPI {
                     if (data.length > 0) {
                         console.log("Email matched in database");
 
-                         var response = {};
                         
+
 
                         bycrypt.compare(loginDataObject.Password, data[0].Password, (err, passwordCompareResult) => {
                             if (err) {
@@ -145,11 +146,11 @@ class UserModelAPI {
                                         'FirstName': data[0].FirstName,
                                         'LastName': data[0].LastName,
                                         'EmailId': data[0].EmailId,
-                                    
+
                                     }
                                     response.success = true;
                                     response.message = "Yaaa Login Successful ";
-                                    response.data=result
+                                    response.data = result
 
                                     return callback(null, response)
                                 } else {
@@ -165,7 +166,9 @@ class UserModelAPI {
                     } else //When email not found
                     {
                         console.log("Login failed because Email not registered");
-                        callback(null, false);
+                        response.success = false;
+                        response.message = "Login failed because Email not registered";
+                        callback(null, response);
 
                     }
                 }
@@ -205,8 +208,8 @@ class UserModelAPI {
 
                 } else {
                     console.log("\n\n\t\t Your Email matched");
-                    data.success=true;
-                    return callback(null, data)
+                    data.success = true;
+                    return callback(null, data[0])
 
                 }
             }
@@ -217,16 +220,16 @@ class UserModelAPI {
 
     resetPasswordUser(resetPasswordDataObject, callback) {
         console.log("inside model password is " + resetPasswordDataObject.Password);
-        console.log("id is" + resetPasswordDataObject._id);
+        console.log("id is " + resetPasswordDataObject._id);
 
         encryptPassword(resetPasswordDataObject.Password, (err, hashedPassword) => {
             if (err) {
                 return callback(err);
             } else {
-                console.log("password-->",resetPasswordDataObject.Password);
-                
-                console.log("hash password-->",hashedPassword);
-                
+                console.log("password-->", resetPasswordDataObject.Password);
+
+                console.log("hash password-->", hashedPassword);
+
                 User.findOneAndUpdate({
                     // 'EmailId': resetPasswordDataObject.EmailId
                     '_id': resetPasswordDataObject._id
@@ -252,25 +255,25 @@ class UserModelAPI {
         })
     }
 
-    getAllUsers(callback){
-        try{
-            User.find({ },(err, data) => {
-                var response={};
+    getAllUsers(callback) {
+        try {
+            User.find({}, (err, data) => {
+                var response = {};
                 if (err) {
                     response.success = false;
                     response.message = " Error";
                     response.error = err;
-    
+
                     return callback(response)
-    
+
                 } else {
-                  //  console.log("All users-----> " + data);
-                    return callback(null,data);
+                    //  console.log("All users-----> " + data);
+                    return callback(null, data);
                 }
 
-                })
-        }catch(err){
-            console.log(err);     
+            })
+        } catch (err) {
+            console.log(err);
         }
     }
 

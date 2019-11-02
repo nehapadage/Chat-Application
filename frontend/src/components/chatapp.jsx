@@ -19,7 +19,8 @@ class ChatApp extends Component {
             ReceiverName: "",
             Messages: [],
             ReceivedMessages: [],
-            redirect: false
+            redirect: false,
+            flag:false
         }
     }
 
@@ -38,7 +39,7 @@ class ChatApp extends Component {
         }
       }
 
-
+      
 
     async handleReceiverClick(FirstName, _id) {
         // console.log("In handle Receiver click" + JSON.stringify([this.state.Names]));
@@ -54,10 +55,14 @@ class ChatApp extends Component {
         //     Message: this.state.messages
         // }
 
+         
+
         await this.setState({
             ReceiverId: _id,
             ReceiverName: FirstName
         })
+
+        this.setState({flag:true});
 
 
         console.log("Receiver data" + this.state.ReceiverId + " " + this.state.ReceiverName);
@@ -277,7 +282,9 @@ class ChatApp extends Component {
 
 
         this.getMessages()
-        // senMsgApi(sendObject)
+        
+        // To Make input field clear after sending message
+        this.setState({messages:" "})
 
 
 
@@ -321,6 +328,26 @@ class ChatApp extends Component {
 
         console.log("map result" + mapMessageResult);
 
+        // var flagResult=()=>{
+
+        //     if(this.state.flag)
+        //     { 
+        //     <div id='inputField'>
+        //         <input class="input"
+        //             // onfocus="this.value=''"
+        //             onChange={this.handlechangeall}
+        //             name="messages"
+        //             value={this.state.messages}
+        //             placeholder="type here" ></input>
+        //         <div className="sendButton">
+        //             <button id="send" onClick={() => this.sendClick()}>Send</button>
+    
+        //         </div>
+        //     </div>
+        //     }
+           
+        // }
+
 
 
         return (
@@ -342,28 +369,42 @@ class ChatApp extends Component {
 
 
                     </div>
+                    {this.state.flag?
                     <div id="field">
+                          
                         <div id="ReceiverName">
                             <div id="ReceiverNameText">{this.state.ReceiverName}.</div>
                         </div>
                         <div id="chatField">
+
                             {mapMessageResult}
                         </div>
 
+                     
+                         <div id='inputField'>
+                         <input class="input"
+                             // onfocus="this.value=''"
+                             onChange={this.handlechangeall}
+                             name="messages"
+                             value={this.state.messages}
+                             placeholder="type here" ></input>
+                         <div className="sendButton">
+                             <button id="send" onClick={() => this.sendClick()}>Send</button>
+             
+                         </div>
+                     </div>
+                     </div>
+                     :
+                    //  null
+                    <img src = {require('../Assets/img1.jpg')} alt = "Logo" id = "imageFlex"/>
+                    
+                    }
 
-                        <div id='inputField'>
-                            <input class="input"
+                      
 
-                                onChange={this.handlechangeall}
-                                name="messages"
-                                value={this.state.messages}
-                                placeholder="type here" ></input>
-                            <div className="sendButton">
-                                <button id="send" onClick={() => this.sendClick()}>Send</button>
+                        
 
-                            </div>
-                        </div>
-                    </div>
+                   
 
 
                 </div>

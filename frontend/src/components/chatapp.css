@@ -92,7 +92,7 @@
     background-color:rgb(178, 217, 243);
     width : 20%;
     display: flex;
-    height: 550px;
+    height: 585px;
     flex-direction: column;
     overflow-y: scroll;
 }
@@ -160,3 +160,7 @@
 
 }
 
+#imageFlex{
+    width: 80%;
+    height: 100%;
+}

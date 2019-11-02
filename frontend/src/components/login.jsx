@@ -21,6 +21,12 @@ class Login extends Component {
         }
     }
 
+    validateEmail(email){
+        // var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        var re=/^([a-z\d\.-]+)@([a-z\d-]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/
+        return re.test(email);
+      }
+
     validate = () => {
         let isError = false;
 
@@ -30,6 +36,11 @@ class Login extends Component {
         };
 
         if (!this.state.email.includes("@")) {
+            isError = true;
+            errors.emailError = "Requires valid email";
+        }
+
+        if (! this.validateEmail(this.state.email)) {
             isError = true;
             errors.emailError = "Requires valid email";
         }
@@ -80,22 +91,31 @@ class Login extends Component {
         login(loginData).then((res) => {
             console.log("respnse in login--> ", res)
 
-            console.log("****respnse in login token is--> ", res.data.token.token)
-            console.log("data of login user--->" + res.data.data.FirstName);
+            // console.log("****respnse in login token is--> ", res.data.token.token)
+            // console.log("data of login user--->" + res.data.data.FirstName);
 
 
             if (res.data.success === true) {
                 alert("Login Successful-----");
+                localStorage.setItem('LoginToken', res.data.token.token);
+                localStorage.setItem('SenderName', res.data.data.FirstName);
+                localStorage.setItem('SenderId', res.data.data._id);
                 var path = '/chatapp'
                 this.props.history.push(path)
             }
-            else
-            {
-                alert("EmailId or Password is incorrect");
+            else{
+                if(res.data.message === "Ohhh Your Password not matched ")
+                {
+                    alert("Password is incorrect");
+                }
+                else{
+                    alert("Email is not registerd")
+                }
             }
-            localStorage.setItem('LoginToken', res.data.token.token);
-            localStorage.setItem('SenderName', res.data.data.FirstName);
-            localStorage.setItem('SenderId', res.data.data._id);
+            
+
+            
+           
 
 
 

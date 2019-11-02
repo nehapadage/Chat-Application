@@ -38,7 +38,8 @@ class UserService {
                 }
                 //send data to controller callback function 
                 else {
-                    console.log("Response in services" ,data);
+                    if(data.success===true){
+                        console.log("Response in services" + data);
                     
                     let payload = {
                         '_id': data._id,
@@ -53,6 +54,11 @@ class UserService {
                         data.token=jwtToken
                     
                     return callback(null, data);
+                    }
+                    else{
+                        return callback(null, data); 
+                    }
+                    
                 }
             })
         } catch (error) {

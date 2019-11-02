@@ -29,7 +29,7 @@ class TokenGenerator {
                 if (err) {
                     res.status(400).send(err + " Token has expired")
                 } else {
-                  //  console.log("token " + JSON.stringify(decodedToken));
+                   console.log("token " + JSON.stringify(decodedToken));
                     req.decoded = decodedToken;
                    // console.log("Decoded data: "+req.decoded);
                     
